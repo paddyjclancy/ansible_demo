@@ -26,9 +26,9 @@
     args:
       chdir: /home/ubuntu
 
-  - name: Install Forever
+  - name: Install PM2
     npm:
-      name: forever
+      name: pm2
       global: yes
 
   - name: Install Nginx
@@ -56,13 +56,19 @@
     shell: pm2 stop all
     args:
       chdir: /home/ubuntu/web-app
+    ignore_errors: yes
 
-  - name: Install npm updates
+  - name: Install npm forever
     shell: npm install
     args:
       chdir: /home/ubuntu/web-app
 
-  - name: Start forever
+  - name: Install npm updates
+    shell: npm install forever
+    args:
+      chdir: /home/ubuntu/web-app
+
+  - name: Start app
     shell: forever start app.js
     args:
       chdir: /home/ubuntu/web-app

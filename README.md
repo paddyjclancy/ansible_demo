@@ -28,7 +28,23 @@
 
 - ansible ping -m all
 
+## Now its time to run our playbook for DB
 
+1. Lets run the `ansible-playbook playbook_db.yml` first to get our db machine setup. Make sure you are in the ansible directory. use pwd to make sure.
+2. We can check that the service is running by bashing `systemctl status mongod`
+
+- We should see that the mongod.service is active and running!
+
+## Now its time to run our playbook for Web App
+
+1. Run `ansible-playbook playbook.yml`
+
+- Great, our app is running!
+
+## How to get /posts working
+
+- At the moment posts is not working after forver start app.js from within the playbook
+- However if we vagrant reload, and go straight in the web machine, run forever start app.js  |  it now works. On to more debugging...
 
 
 
