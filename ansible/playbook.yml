@@ -1,0 +1,75 @@
+# This is an example of ansible playbook written in YMAL
+# YAML FILE STARTS WITH THREE --- DASHES(---)
+---
+- hosts: web
+# host is to define the name of your host machine, group or all servers
+# in this example we are targeting server called web
+  gather_facts: yes
+# gethering facts before performing any tasks
+  become: true
+# become is used to get root permission to perform any tasks that may require admin access
+  tasks:
+  - name: Install git
+    apt: name=git
+
+  - name: Install Python Software Properties
+    apt: pkg=python-software-properties state=present
+
+  - name: Curl Node Source
+    shell: curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+
+  - name: Install Node.js
+    apt: pkg=nodejs state=present
+
+  - name: install NPM
+    shell: npm install
+    args:
+      chdir: /home/ubuntu
+
+  - name: Install Forever
+    npm:
+      name: forever
+      global: yes
+
+  - name: Install Nginx
+    apt: pkg=nginx state=present
+
+  - name: Remove nginx default files - sites available
+    shell: rm /etc/nginx/sites-available/default.conf
+
+  - name: Remove nginx default files - sites enabled
+    shell: rm /etc/nginx/sites-enabled/default.conf
+
+  - name: Copy nginx default file
+    shell: cp /home/ubuntu/nginx.conf /etc/nginx/sites-available/default.conf
+
+  - name: Symlink from sites available to sites enabled
+    shell: ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+
+  - name: Restart nginx
+    shell: service nginx restart
+
+  - name: export db host variable for database
+    shell: echo 'export DB_HOST=mongodb://192.168.0.20:27017/posts' >> ~/.bashrc
+
+  - name: Stop pm2
+    shell: pm2 stop all
+    args:
+      chdir: /home/ubuntu/web-app
+
+  - name: Install npm updates
+    shell: npm install
+    args:
+      chdir: /home/ubuntu/web-app
+
+  - name: Start forever
+    shell: forever start app.js
+    args:
+      chdir: /home/ubuntu/web-app
+
+  - name: Restart nginx
+    shell: systemctl restart nginx
+    args:
+      chdir: /home/ubuntu/web-app
+
+

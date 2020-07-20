@@ -1,29 +1,5 @@
 # Ansible and Infrastructure as code
 
-### Infrastructure as code?
-
-- Setting up infrastructure with code rather than clicking away and repeatedly writing commands every time.
-- Source code that is more robust than Isolated scripts, e.g. 1 script for dev environment, then changing the script for the Production environment.
-
-### Configuration Management tools
-
-- These tools allow the implementation of Infrastructure as Code
-
-CM Tools:
-1. Chef
-2. Puppet
-3. Ansible 
-4. Other
-
-#### Orchestration tools
-
-- These tools are aimed more at configuring the networking and deployment at scale.
-
-Orchestration tools:
-1. Ansible
-2. Terraform 
-3. Other
-
 ## Ansible - Introduction
 
 - Ansible is a high level language, meaning it is highly abstracted. 
@@ -38,12 +14,22 @@ Orchestration tools:
 
 ### Installing Ansible
 
-- On Windows, use a VM to Install it
-- On Mac, Use Python or HomeBrew
+- On Windows, use a Linux Sub-system to install it - OR - Install it on a VM
+- On Mac, Use Python or HomeBrew. 
+
+## How to connect through SSH
+
+- After setting up Password Authentication
+
+1. In Ansible machine, ssh-keygen
+2. ssh-copy-id <Target Machine IP>
+
+## Test if ansible can connect to agent nodes
+
+- ansible ping -m all
 
 
-### Ansible Demo
 
-- Objectives:
-1. Emulate a real environment. Create 3 machines and use ansible to manage them
+
+
 
