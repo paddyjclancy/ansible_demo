@@ -52,8 +52,19 @@
 ## How to get /posts working
 
 - At the moment posts is not working after forver start app.js from within the playbook
-- However if we vagrant reload, and go straight in the web machine, run forever start app.js  |  it now works. On to more debugging...
+- However if we go straight in the web machine, `ps aux | grep node`, kill the running processes
+- run forever start app.js  |  it now works. On to more debugging...
 
+## How I fixed this!
 
-
-
+- ```yaml 
+    - name: start app -shell
+      shell:
+        cmd: . ~/.bashrc && forever start app.js
+        chdir: /home/ubuntu/web-app
+  
+    - name: node seeds -shell
+      shell:
+        cmd: . ~/.bashrc && node seed.js
+        chdir: /home/ubuntu/web-app/seeds```
+        

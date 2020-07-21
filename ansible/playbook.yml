@@ -12,11 +12,11 @@
   - name: Install git
     apt: name=git
 
-  - name: Install Python Software Properties
-    apt: pkg=python3-software-properties state=present
-
   - name: Curl Node Source
-    shell: curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    shell: curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+  - name: Install Python
+    apt: pkg=python state=present
 
   - name: Install Node.js
     apt: pkg=nodejs state=present
@@ -55,7 +55,7 @@
   - name: Stop pm2
     shell: pm2 stop all
     args:
-      chdir: /home/ubuntu/web-app
+      chdir: /home/ubuntu/web-app/
     ignore_errors: yes
 
   - name: Install Forever
@@ -67,22 +67,25 @@
     shell: node seed.js
     args:
       chdir: /home/ubuntu/web-app/seeds
-    ignore_errors: yes
 
   - name: Install npm updates
     shell: npm install
     args:
       chdir: /home/ubuntu/web-app
 
-  - name: Start app
-    shell: forever start -c app.js
-    args:
+  - name: start app -shell
+    shell:
+      cmd: . ~/.bashrc && forever start app.js
       chdir: /home/ubuntu/web-app
 
-  - name: Restart nginx
-    shell: systemctl restart nginx
-    args:
-      chdir: /home/ubuntu/web-app
+  - name: node seeds -shell
+    shell:
+      cmd: . ~/.bashrc && node seed.js
+      chdir: /home/ubuntu/web-app/seeds
+
+
+
+
 
 
 
