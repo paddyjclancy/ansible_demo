@@ -13,7 +13,7 @@
     apt: name=git
 
   - name: Install Python Software Properties
-    apt: pkg=python-software-properties state=present
+    apt: pkg=python3-software-properties state=present
 
   - name: Curl Node Source
     shell: curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -41,7 +41,7 @@
     shell: rm /etc/nginx/sites-enabled/default.conf
 
   - name: Copy nginx default file
-    shell: cp /home/ubuntu/nginx.conf /etc/nginx/sites-available/default.conf
+    shell: cp /home/ubuntu/web-app/nginx.conf /etc/nginx/sites-available/default.conf
 
   - name: Symlink from sites available to sites enabled
     shell: ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
@@ -50,7 +50,7 @@
     shell: service nginx restart
 
   - name: export db host variable for database
-    shell: echo 'export DB_HOST=mongodb://192.168.0.20:27017/posts' >> ~/.bashrc
+    shell: echo "DB_HOST=mongodb://192.168.0.20:27017/posts" >> ~/.bashrc
 
   - name: Stop pm2
     shell: pm2 stop all
@@ -58,18 +58,24 @@
       chdir: /home/ubuntu/web-app
     ignore_errors: yes
 
-  - name: Install npm forever
+  - name: Install Forever
+    npm:
+      name: forever
+      global: yes
+
+  - name: NODE | Seed Posts
+    shell: node seed.js
+    args:
+      chdir: /home/ubuntu/web-app/seeds
+    ignore_errors: yes
+
+  - name: Install npm updates
     shell: npm install
     args:
       chdir: /home/ubuntu/web-app
 
-  - name: Install npm updates
-    shell: npm install forever
-    args:
-      chdir: /home/ubuntu/web-app
-
   - name: Start app
-    shell: forever start app.js
+    shell: forever start -c app.js
     args:
       chdir: /home/ubuntu/web-app
 
@@ -77,5 +83,7 @@
     shell: systemctl restart nginx
     args:
       chdir: /home/ubuntu/web-app
+
+
 
 

@@ -17,6 +17,14 @@
 - On Windows, use a Linux Sub-system to install it - OR - Install it on a VM
 - On Mac, Use Python or HomeBrew. 
 
+## How to connect through password
+
+1. In the ansible machine, go to your `ansible.cfg` file and disable `host_key_checking`
+2. In your agent machines, go to your `etc/ssh/sshd_config` file and change `PermitRootLogin` -> Yes. `PasswordAuthentication` -> Yes
+3. In each agent machine, `sudo passwd root`. Create the password for each machine
+
+- Lastly `sudo service sshd restart` in each agent machine.
+
 ## How to connect through SSH
 
 - After setting up Password Authentication

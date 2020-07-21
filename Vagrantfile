@@ -19,8 +19,6 @@ Vagrant.configure("2") do |config|
 	# Web Virtual Machine
 	config.vm.define "web" do |web|
 		web.vm.box = "ubuntu/xenial64"
-		web.vm.synced_folder "web-app", "/home/ubuntu/web-app"
-		web.vm.synced_folder "tests", "/home/ubuntu/tests"
 		web.vm.network :private_network, ip: "192.168.0.10"
 		web.vm.hostname = "web"
 		web.hostsupdater.aliases = ["development.web"] 
@@ -44,6 +42,8 @@ Vagrant.configure("2") do |config|
 		ansible.vm.box = "ubuntu/xenial64"
 		ansible.vm.provision "shell", path: "ansible-provision.sh"
 		ansible.vm.synced_folder "ansible", "/home/ubuntu/ansible"
+		ansible.vm.synced_folder "web-app", "/home/ubuntu/web-app"
+		ansible.vm.synced_folder "tests", "/home/ubuntu/tests"
 		ansible.vm.network :private_network, ip: "192.168.0.40"
 		ansible.vm.hostname = "ansible"
 		ansible.hostsupdater.aliases = ["development.ansible"]

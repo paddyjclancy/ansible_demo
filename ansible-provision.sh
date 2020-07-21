@@ -20,4 +20,6 @@ sudo echo "[aws]" >> /etc/ansible/hosts
 
 sudo echo "192.168.0.30 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant" >> /etc/ansible/hosts
 
+sudo echo "host_key_checking = False" >> /etc/ansible/ansible.cfg
+
 
