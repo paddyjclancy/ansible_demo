@@ -20,10 +20,14 @@
 ## How to connect through password
 
 1. In the ansible machine, go to your `ansible.cfg` file and disable `host_key_checking`
+	- In the default location, not at the bottom of the file
 2. In each agent machines, go to your `etc/ssh/sshd_config` file and change `PermitRootLogin` -> Yes. `PasswordAuthentication` -> Yes
 3. In each agent machine, `sudo passwd root`. Create the password for each machine
 
 - Lastly `sudo service sshd restart` in each agent machine.
+
+- hosts file: user = root
+- playbook: gather_facts: no
 
 ## How to connect through SSH
 
@@ -62,7 +66,6 @@
       shell:
         cmd: . ~/.bashrc && forever start app.js
         chdir: /home/ubuntu/web-app
-  
     - name: node seeds -shell
       shell:
         cmd: . ~/.bashrc && node seed.js
