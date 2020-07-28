@@ -35,16 +35,16 @@
     apt: pkg=nginx state=present
 
   - name: Remove nginx default files - sites available
-    shell: rm /etc/nginx/sites-available/default.conf
+    shell: rm /etc/nginx/sites-available/default
 
   - name: Remove nginx default files - sites enabled
-    shell: rm /etc/nginx/sites-enabled/default.conf
+    shell: rm /etc/nginx/sites-enabled/default
 
   - name: Copy nginx default file
-    shell: cp /home/ubuntu/web-app/nginx.conf /etc/nginx/sites-available/default.conf
+    shell: cp /home/ubuntu/web-app/nginx.conf /etc/nginx/sites-available/default
 
   - name: Symlink from sites available to sites enabled
-    shell: ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+    shell: ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
   - name: Restart nginx
     shell: service nginx restart

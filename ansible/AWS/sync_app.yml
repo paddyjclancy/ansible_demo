@@ -1,0 +1,9 @@
+---
+- hosts: AWS_EC2_app
+  gather_facts: yes
+  become: true
+
+  tasks:
+
+  - name: Sync app directory
+    synchronize: src=/home/ubuntu/web-app dest=/home/ubuntu/

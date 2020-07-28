@@ -1,0 +1,96 @@
+---
+- hosts: Localhost
+# host is to define the name of your host machine, group or all servers
+# in this example we are targeting server called web
+  gather_facts: yes
+# gethering facts before performing any tasks
+  become: true
+# become is used to get root permission to perform any tasks that may require admin access
+  tasks:
+  - name: Install git
+    apt: name=git
+
+  - name: Curl Node Source
+    shell: curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+  - name: Install Python
+    apt: pkg=python state=present
+
+  - name: Install Node.js
+    apt: pkg=nodejs state=present
+
+  - name: install NPM
+    shell: npm install
+    args:
+      chdir: /home/ubuntu
+
+  - name: Install PM2
+    npm:
+      name: pm2
+      global: yes
+
+  - name: Install Nginx
+    apt: pkg=nginx state=present
+
+    
+# ---
+# - hosts: Localhost
+#   gather_facts: False
+#   # Example using filters, ignoring permission errors, and specifying the hostname precedence
+#   plugin: aws_ec2
+
+#   # aws_access_key: env:AWS_ACCESS_KEY_ID
+#   # aws_secret_key: env:AWS_SECRET_ACCESS_KEY
+#   # Populate inventory with instances in these regions
+#   regions:
+#     - eu-west-1
+#   filters:
+#     # All instances with their `Environment` tag set to `dev`
+#     tag:Environment: Patrick.Testing.Env
+
+#   # Ignores 403 errors rather than failing
+#   strict_permissions: False
+
+#   tasks:
+#   - name: Install git
+#     apt: name=git
+
+#   - name: Curl Node Source
+#     shell: curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+#   - name: Install Python
+#     apt: pkg=python state=present
+
+#   - name: Install Node.js
+#     apt: pkg=nodejs state=present
+
+#   - name: install NPM
+#     shell: npm install
+#     args:
+#       chdir: /home/ubuntu
+
+#   - name: Install PM2
+#     npm:
+#       name: pm2
+#       global: yes
+
+#   - name: Install Nginx
+#     apt: pkg=nginx state=present
+
+#   - name: Remove nginx default files - sites available
+#     shell: rm /etc/nginx/sites-available/default.conf
+
+#   - name: Remove nginx default files - sites enabled
+#     shell: rm /etc/nginx/sites-enabled/default.conf
+
+#   - name: Copy nginx default file
+#     shell: cp /home/ubuntu/web-app/nginx.conf /etc/nginx/sites-available/default.conf
+
+#   - name: Symlink from sites available to sites enabled
+#     shell: ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+
+#   - name: Restart nginx
+#     shell: service nginx restart
+
+#   - name: export db host variable for database
+#     shell: echo "DB_HOST=mongodb://192.168.0.20:27017/posts" >> ~/.bashrc

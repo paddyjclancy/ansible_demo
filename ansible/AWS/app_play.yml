@@ -1,0 +1,82 @@
+  ---
+- hosts: AWS_EC2_app
+  gather_facts: yes
+  become: true
+
+  tasks:
+
+  - name: Update apt
+    become: true
+    apt:
+      upgrade: yes
+      update_cache: yes
+
+  - name: Install Git
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+
+  - name: Curl Node Source
+    shell: curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+  - name: Install Python
+    apt: pkg=python state=present
+
+  - name: Install gpg key for Nodejs
+    apt_key:
+      url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+      state: present
+
+  - name: Install Node.js
+    apt: pkg=nodejs state=present
+
+  - name: Install NPM
+    shell: npm install
+    args:
+      chdir: /home/ubuntu
+  
+  - name: Install PM2
+    npm:
+      name: pm2
+      global: yes
+
+#  - name: Export DB_HOST variable (for /posts)
+#    shell: echo "DB_HOST=mongodb://192.168.0.20:27017/posts" >> ~/.bashrc"
+#                                     IP WILL NEED CHANGING
+
+  - name: Stop pm2
+    shell: pm2 stop app.js
+    args:
+      chdir: /home/ubuntu/web-app
+    ignore_errors: yes
+
+  - name: Install Forever
+    npm:
+      name: forever
+      global: yes
+      state: present
+
+#  - name: Node - Seed posts
+#    shell: node seed.js
+#    args:
+#      chdir: /home/ubuntu/web-app/seeds
+
+  - name: Install NPM updates
+    shell: npm install
+    args:
+      chdir: /home/ubuntu/web-app
+
+  - name: Stop app if running
+    command: forever stopall
+    ignore_errors: yes
+
+  - name: start app (shell)
+    shell:
+      cmd: . ~root/.bashrc && forever start app.js
+      chdir: /home/ubuntu/web-app
+
+  - name: node seeds (shell)
+    shell:
+      cmd: . ~root/.bashrc && node seed.js
+      chdir: /home/ubuntu/web-app/seeds
